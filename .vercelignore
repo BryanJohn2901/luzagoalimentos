@@ -1,0 +1,9 @@
+.claude/
+.env
+.env.*
+!.env.example
+*.py
+raw_text.txt
+google-apps-script.gs
+migrate_clean_urls.py
+node_modules/
