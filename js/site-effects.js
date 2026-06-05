@@ -4,8 +4,11 @@
 (function () {
     'use strict';
 
-    var AOS_TARGETS = '.product-item, .product-card, .blog-card, .catalog-item, .review-card, .instagram-card, footer > div > div';
-    var HERO_SELECTOR = 'section[class*="hero"] .container, section[class*="hero"] > div > *';
+    /* Grids com dezenas de itens: só fade-in (sem transform) para não gerar overflow */
+    var AOS_FADE_IN_TARGETS = '.product-card, .blog-card, .review-card, .instagram-card';
+    /* Poucos itens por página */
+    var AOS_FADE_UP_TARGETS = '.product-item';
+    var HERO_SELECTOR = 'section[class*="hero"] > .container > *, section[class*="hero"] > div > *:not(.mobile-menu *)';
 
     function initLazyImages() {
         document.querySelectorAll('img[loading="lazy"]').forEach(function (img) {
@@ -73,24 +76,29 @@
         });
     }
 
+    function setAos(el, type, delay) {
+        if (el.hasAttribute('data-aos')) return;
+        el.setAttribute('data-aos', type);
+        if (delay) el.setAttribute('data-aos-delay', String(delay));
+    }
+
     function applyAosAttributes() {
-        document.querySelectorAll(AOS_TARGETS).forEach(function (el, i) {
-            if (el.hasAttribute('data-aos')) return;
-            el.setAttribute('data-aos', 'fade-up');
-            el.setAttribute('data-aos-delay', String(Math.min((i % 8) * 60, 360)));
+        document.querySelectorAll(AOS_FADE_IN_TARGETS).forEach(function (el, i) {
+            setAos(el, 'fade-in', Math.min((i % 6) * 50, 250));
         });
 
-        document.querySelectorAll('section h1, section h2, .blog-article').forEach(function (el, i) {
-            if (el.hasAttribute('data-aos')) return;
-            el.setAttribute('data-aos', 'fade-up');
-            el.setAttribute('data-aos-delay', String(Math.min(i * 40, 200)));
+        document.querySelectorAll(AOS_FADE_UP_TARGETS).forEach(function (el, i) {
+            if (el.closest('#catalog-grid')) return;
+            setAos(el, 'fade-up', Math.min((i % 6) * 40, 200));
+        });
+
+        document.querySelectorAll('section h1, section h2').forEach(function (el, i) {
+            setAos(el, 'fade-up', Math.min(i * 30, 150));
         });
 
         document.querySelectorAll(HERO_SELECTOR).forEach(function (el, i) {
-            if (el.hasAttribute('data-aos')) return;
-            el.setAttribute('data-aos', 'fade-up');
-            el.setAttribute('data-aos-duration', '800');
-            el.setAttribute('data-aos-delay', String(i * 80));
+            if (el.closest('header') || el.closest('.mobile-menu')) return;
+            setAos(el, 'fade-up', i * 60);
         });
     }
 
@@ -98,11 +106,14 @@
         if (typeof AOS === 'undefined') return;
         var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         AOS.init({
-            duration: 700,
+            duration: 600,
             easing: 'ease-out-cubic',
             once: true,
-            offset: 50,
-            disable: reduced
+            offset: 24,
+            delay: 0,
+            disable: reduced,
+            anchorPlacement: 'top-bottom',
+            startEvent: 'DOMContentLoaded'
         });
     }
 
@@ -129,7 +140,10 @@
             wrapProductImages();
             applyAosAttributes();
             initLazyImages();
-            if (typeof AOS !== 'undefined') AOS.refresh();
+            if (typeof AOS !== 'undefined') {
+                if (typeof AOS.refreshHard === 'function') AOS.refreshHard();
+                else AOS.refresh();
+            }
         }
     };
 })();

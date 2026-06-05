@@ -6,6 +6,7 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parent
 
 AOS_CSS = '    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">\n'
+AOS_FIXES_CSS = '    <link rel="stylesheet" href="/css/aos-fixes.css">\n'
 EFFECTS_CSS = '    <link rel="stylesheet" href="/css/effects.css">\n'
 
 AOS_SCRIPTS = '''    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
@@ -26,15 +27,22 @@ PRODUCT_ITEM_NEW = (
 
 
 def patch_head(content: str) -> str:
+    aos_bundle = AOS_CSS + AOS_FIXES_CSS + EFFECTS_CSS.rstrip()
     if 'aos@2.3.4' not in content:
         anchor = '    <link rel="stylesheet" href="/css/buttons.css">'
         blog_anchor = '    <link rel="stylesheet" href="/css/blog.css">'
         if blog_anchor in content:
-            content = content.replace(blog_anchor, blog_anchor + '\n' + AOS_CSS + EFFECTS_CSS.rstrip())
+            content = content.replace(blog_anchor, blog_anchor + '\n' + aos_bundle)
         elif anchor in content:
-            content = content.replace(anchor, anchor + '\n' + AOS_CSS + EFFECTS_CSS.rstrip())
-    elif '/css/effects.css' not in content:
-        content = content.replace(AOS_CSS.strip(), AOS_CSS.strip() + '\n' + EFFECTS_CSS.rstrip())
+            content = content.replace(anchor, anchor + '\n' + aos_bundle)
+    else:
+        if '/css/aos-fixes.css' not in content:
+            content = content.replace(
+                '    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">',
+                '    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">\n' + AOS_FIXES_CSS.rstrip(),
+            )
+        if '/css/effects.css' not in content:
+            content = content.replace(AOS_CSS.strip(), AOS_CSS.strip() + '\n' + EFFECTS_CSS.rstrip())
     return content
 
 
