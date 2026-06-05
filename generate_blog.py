@@ -169,6 +169,8 @@ HEAD = '''<!DOCTYPE html>
     <link rel="stylesheet" href="/css/blog.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
     <link rel="stylesheet" href="/css/effects.css">
+    <link rel="stylesheet" href="/css/mobile-menu.css">
+    <link rel="stylesheet" href="/css/responsive.css">
 </head>
 <body class="font-sans text-gray-800 antialiased bg-gray-50">
 '''
@@ -227,8 +229,8 @@ def nav(blog_active: bool = False) -> str:
                 <a href="/trabalhe-conosco/#fornecedor" class="inline-flex items-center leading-none hover:text-luzago-green transition">Seja fornecedor</a>
                 <a href="/contato/" class="btn btn--primary btn--sm">Solicite orçamento</a>
             </nav>
-            <button class="md:hidden text-gray-600 text-2xl focus:outline-none" aria-label="Abrir menu">
-                <i class="fa-solid fa-bars"></i>
+            <button type="button" class="mobile-menu-toggle md:hidden" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu-panel">
+                <i class="fa-solid fa-bars" aria-hidden="true"></i>
             </button>
         </div>
     </header>
@@ -279,6 +281,7 @@ FOOTER = '''
     </a>
 
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="/js/mobile-menu.js"></script>
     <script src="/js/site-effects.js"></script>
 </body>
 </html>
