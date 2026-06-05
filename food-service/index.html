@@ -60,6 +60,8 @@
     </style>
     <link rel="stylesheet" href="/css/whatsapp-widget.css">
     <link rel="stylesheet" href="/css/buttons.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="/css/effects.css">
 </head>
 <body class="font-sans text-gray-800 antialiased bg-gray-50">
 
@@ -87,7 +89,7 @@
         <div class="container mx-auto max-w-6xl px-4 py-4 flex justify-between items-center">
             <!-- Logo -->
             <a href="/">
-                <img src="/assets/icones/logo-luzago.png" alt="Luzago Alimentos" class="h-16 md:h-20 object-contain">
+                <img loading="eager" decoding="async" src="/assets/icones/logo-luzago.png" alt="Luzago Alimentos" class="h-16 md:h-20 object-contain">
             </a>
 
             <!-- Desktop Nav -->
@@ -127,7 +129,7 @@
     <!-- Hero -->
     <section class="food-service-hero-bg h-[300px] md:h-[400px] flex items-center justify-center text-center px-4 relative mt-[72px] md:mt-0">
         <div class="flex flex-col items-center">
-            <img src="/assets/icones/categoria-food-service.svg" alt="Food Service" class="w-12 h-12 md:w-16 md:h-16 mb-4 object-contain invert">
+            <img loading="lazy" decoding="async" src="/assets/icones/categoria-food-service.svg" alt="Food Service" class="w-12 h-12 md:w-16 md:h-16 mb-4 object-contain invert">
             <h1 class="text-4xl md:text-5xl font-bold text-white tracking-wide">Food Service</h1>
         </div>
     </section>
@@ -138,90 +140,90 @@
         <div class="container mx-auto px-4 max-w-6xl">
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
 
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/azeite-extra-virgem.jpeg" alt="Azeite Extra Virgem" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/azeite-extra-virgem.jpeg" alt="Azeite Extra Virgem" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Azeite Extra Virgem</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>2L</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/mel-divino.jpeg" alt="Mel – Divino" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/mel-divino.jpeg" alt="Mel – Divino" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Mel – Divino</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>400g | Caixa - 24 unidades</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/vinho-branco-seco-niagara.jpeg" alt="Vinho Branco Seco Niágara" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/vinho-branco-seco-niagara.jpeg" alt="Vinho Branco Seco Niágara" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Vinho Branco Seco Niágara</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>3.6L</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/tahine-pasta-de-gergelim.jpeg" alt="Tahine – Pasta de Gergelim" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/tahine-pasta-de-gergelim.jpeg" alt="Tahine – Pasta de Gergelim" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Tahine – Pasta de Gergelim</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>500g | Caixa - 12 unidades</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/vinho-tinto-suave.jpeg" alt="Vinho Tinto Suave" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/vinho-tinto-suave.jpeg" alt="Vinho Tinto Suave" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Vinho Tinto Suave</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>4.6L</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/champignon-fatiado.jpeg" alt="Champignon Fatiado" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/champignon-fatiado.jpeg" alt="Champignon Fatiado" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Champignon Fatiado</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>1Kg</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/tahine-pasta-de-gergelim-2.jpeg" alt="Tahine – Pasta de gergelim" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/tahine-pasta-de-gergelim-2.jpeg" alt="Tahine – Pasta de gergelim" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Tahine – Pasta de gergelim</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>250g | Caixa - 24 unidades</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/vinho-tinto-seco-bordo.png" alt="Vinho Tinto Seco Bordô" class="w-16 h-16 object-contain opacity-40">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/vinho-tinto-seco-bordo.png" alt="Vinho Tinto Seco Bordô" class="img-lazy w-16 h-16 object-contain opacity-40">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Vinho Tinto Seco Bordô</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>1.5L | 4.6L | 750ml</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/cafe-alvorada.jpeg" alt="Café Alvorada" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/cafe-alvorada.jpeg" alt="Café Alvorada" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Café Alvorada</h3>
                     <div class="mt-auto w-full">
                         <p class='text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider'>DISPONÍVEL EM:</p><p class='text-sm text-gray-700 font-semibold'>500g | Caixa - 20 unidades</p>
                     </div>
                 </div>
-                                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1">
+                                <div class="product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-6 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">
-                        <img src="/assets/Food Service/cereja-marrasquino-com-cabo.png" alt="Cereja Marrasquino com Cabo" class="w-full h-full object-cover">
+                        <img loading="lazy" decoding="async" src="/assets/Food Service/cereja-marrasquino-com-cabo.png" alt="Cereja Marrasquino com Cabo" class="img-lazy w-full h-full object-cover">
                     </div>
                     <h3 class="text-lg font-bold text-luzago-green-dark mb-4">Cereja Marrasquino com Cabo</h3>
                     <div class="mt-auto w-full">
@@ -337,6 +339,9 @@
         // Initialize state
         updateEmpresaCarousel();
     </script>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="/js/site-effects.js"></script>
 
 </body>
 </html>

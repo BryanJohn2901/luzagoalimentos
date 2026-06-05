@@ -167,6 +167,8 @@ HEAD = '''<!DOCTYPE html>
     <link rel="stylesheet" href="/css/whatsapp-widget.css">
     <link rel="stylesheet" href="/css/buttons.css">
     <link rel="stylesheet" href="/css/blog.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="/css/effects.css">
 </head>
 <body class="font-sans text-gray-800 antialiased bg-gray-50">
 '''
@@ -275,6 +277,9 @@ FOOTER = '''
         <span class="luzago-wa-widget__btn"><i class="fa-brands fa-whatsapp"></i></span>
         <span class="luzago-wa-widget__cta">Fale Conosco</span>
     </a>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script src="/js/site-effects.js"></script>
 </body>
 </html>
 '''

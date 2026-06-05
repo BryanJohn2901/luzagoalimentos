@@ -28,9 +28,9 @@
     function productCard(product) {
         var imgClass = product.image.endsWith('.svg') ? 'w-16 h-16 object-contain opacity-80' : 'w-full h-full object-cover';
         return (
-            '<div class="catalog-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100 hover:shadow-lg transition duration-300 transform hover:-translate-y-1" data-category="' + product.category + '">' +
-                '<div class="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-4 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">' +
-                    '<img src="' + product.image + '" alt="' + product.name + '" class="' + imgClass + '" loading="lazy">' +
+            '<div class="catalog-item product-item bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center border border-gray-100" data-category="' + product.category + '" data-aos="fade-up">' +
+                '<div class="product-item__img-wrap w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden mb-4 border-4 border-gray-100 bg-gray-50 flex items-center justify-center shadow-inner">' +
+                    '<img src="' + product.image + '" alt="' + product.name + '" class="img-lazy ' + imgClass + '" loading="lazy" decoding="async">' +
                 '</div>' +
                 '<span class="text-[10px] uppercase tracking-wider font-bold text-luzago-green mb-1">' + product.categoryName + '</span>' +
                 '<h3 class="text-base md:text-lg font-bold text-luzago-green-dark mb-3 leading-tight">' + product.name + '</h3>' +
@@ -62,6 +62,9 @@
 
         if (emptyEl) emptyEl.classList.add('hidden');
         grid.innerHTML = products.map(productCard).join('');
+        if (window.LuzagoEffects && window.LuzagoEffects.refresh) {
+            window.LuzagoEffects.refresh();
+        }
     }
 
     function setActiveFilter(btn) {
