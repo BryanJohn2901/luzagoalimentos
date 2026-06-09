@@ -38,8 +38,15 @@ var CONFIG = {
 
   SHEETS: {
     comercial: 'Leads Comerciais',
-    curriculo: 'Curriculos',
+    curriculo: 'Currículos',
     fornecedor: 'Fornecedores'
+  },
+
+  /** Nomes alternativos das abas (caso tenham sido criadas manualmente) */
+  SHEET_ALIASES: {
+    comercial: ['Leads Comerciais', 'Leads comerciais'],
+    curriculo: ['Currículos', 'Curriculos', 'Curriculo', 'Curriculum'],
+    fornecedor: ['Fornecedores', 'Fornecedor']
   },
 
   HEADERS: {
@@ -77,13 +84,8 @@ function doPost(e) {
     }
 
     var leadType = data.lead_type || 'comercial';
-    var sheetName = CONFIG.SHEETS[leadType] || CONFIG.SHEETS.comercial;
-    var sheet = getSpreadsheet().getSheetByName(sheetName);
-
-    if (!sheet) {
-      setupSheets();
-      sheet = getSpreadsheet().getSheetByName(sheetName);
-    }
+    var sheet = getSheetForLeadType(leadType);
+    var sheetName = sheet.getName();
 
     ensureHeaders(sheet, CONFIG.HEADERS[leadType] || CONFIG.HEADERS.comercial);
 
@@ -100,7 +102,22 @@ function doPost(e) {
   }
 }
 
-function doGet() {
+function doGet(e) {
+  if (e && e.parameter && e.parameter.ping === '1') {
+    try {
+      var ss = getSpreadsheet();
+      var names = ss.getSheets().map(function (s) { return s.getName(); });
+      return jsonResponse({
+        ok: true,
+        spreadsheet: ss.getName(),
+        spreadsheet_id: ss.getId(),
+        sheets: names
+      });
+    } catch (err) {
+      return jsonResponse({ ok: false, error: err.message });
+    }
+  }
+
   return ContentService
     .createTextOutput('Luzago Leads API ativa — use POST com JSON.')
     .setMimeType(ContentService.MimeType.TEXT);
@@ -113,11 +130,7 @@ function setupSheets() {
   var types = ['comercial', 'curriculo', 'fornecedor'];
 
   types.forEach(function (type) {
-    var name = CONFIG.SHEETS[type];
-    var sheet = ss.getSheetByName(name);
-    if (!sheet) {
-      sheet = ss.insertSheet(name);
-    }
+    var sheet = getSheetForLeadType(type);
     ensureHeaders(sheet, CONFIG.HEADERS[type]);
     sheet.setFrozenRows(1);
     sheet.getRange(1, 1, 1, CONFIG.HEADERS[type].length)
@@ -141,7 +154,31 @@ function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('Luzago')
     .addItem('Configurar abas de leads', 'setupSheets')
+    .addItem('Testar gravação (lead comercial)', 'testWriteComercial')
     .addToUi();
+}
+
+/** Rode manualmente para validar permissões e gravação na planilha */
+function testWriteComercial() {
+  var fakeEvent = {
+    postData: {
+      contents: JSON.stringify({
+        lead_type: 'comercial',
+        submitted_at: new Date().toISOString(),
+        source: { page: '/teste-manual', utm_source: 'apps-script' },
+        fields: {
+          empresa: 'Teste manual Apps Script',
+          email: 'teste@luzago.com.br',
+          telefone: '(41) 3668-7866',
+          categoria: 'temperos',
+          produtos: 'Lead de teste — pode apagar esta linha'
+        }
+      })
+    }
+  };
+  var result = doPost(fakeEvent);
+  Logger.log(result.getContent());
+  SpreadsheetApp.getUi().alert('Teste enviado! Verifique a aba "Leads Comerciais".');
 }
 
 // ─── Montagem das linhas ───────────────────────────────────────────────────
@@ -245,13 +282,39 @@ function getSpreadsheet() {
   return ss;
 }
 
+function getSheetForLeadType(leadType) {
+  var ss = getSpreadsheet();
+  var aliases = CONFIG.SHEET_ALIASES[leadType] || CONFIG.SHEET_ALIASES.comercial;
+  var canonical = CONFIG.SHEETS[leadType] || CONFIG.SHEETS.comercial;
+  var i;
+  var sheet;
+
+  for (i = 0; i < aliases.length; i++) {
+    sheet = ss.getSheetByName(aliases[i]);
+    if (sheet) return sheet;
+  }
+
+  sheet = ss.getSheetByName(canonical);
+  if (!sheet) {
+    sheet = ss.insertSheet(canonical);
+  }
+  return sheet;
+}
+
 function ensureHeaders(sheet, headers) {
-  var lastCol = sheet.getLastColumn();
-  var existing = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
-  var first = (existing[0] || '').toString().trim();
+  var firstCell = sheet.getRange(1, 1).getValue();
+  var first = (firstCell || '').toString().trim();
 
   if (first === '' || first !== headers[0]) {
+    if (sheet.getLastRow() > 0 && first !== '' && first !== headers[0]) {
+      sheet.insertRowBefore(1);
+    }
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sheet.getRange(1, 1, 1, headers.length)
+      .setFontWeight('bold')
+      .setBackground('#0f4c2c')
+      .setFontColor('#ffffff');
+    sheet.setFrozenRows(1);
   }
 }
 
