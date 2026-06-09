@@ -27,6 +27,16 @@ function loadDotEnv() {
 
 loadDotEnv();
 
+const DEFAULT_SHEETS_WEB_APP_URL =
+  'https://script.google.com/macros/s/AKfycbzkTCsLoXQ56r7Xle84tUrpP3PmRsFHlnxx8YRNxPDNRUSb401Rh1uZLva9TFE2bvig/exec';
+
+function readExistingSheetsUrl() {
+  const configPath = path.join(ROOT, 'js', 'runtime-config.js');
+  if (!fs.existsSync(configPath)) return '';
+  const match = fs.readFileSync(configPath, 'utf8').match(/"sheetsWebAppUrl"\s*:\s*"([^"]+)"/);
+  return match && match[1] ? match[1] : '';
+}
+
 const ROUTES = [
   '/',
   '/empresa/',
@@ -59,7 +69,10 @@ function resolveSiteUrl() {
 }
 
 function writeRuntimeConfig() {
-  const sheetsUrl = process.env.SHEETS_WEB_APP_URL || '';
+  const sheetsUrl =
+    process.env.SHEETS_WEB_APP_URL ||
+    readExistingSheetsUrl() ||
+    DEFAULT_SHEETS_WEB_APP_URL;
   const webhookSecret = process.env.SHEETS_WEBHOOK_SECRET || '';
   const content =
     'window.LUZAGO_RUNTIME = ' +

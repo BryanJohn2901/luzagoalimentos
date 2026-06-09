@@ -139,13 +139,25 @@
             return;
         }
 
-        // text/plain evita preflight CORS — padrão recomendado para Web App do Apps Script
-        await fetch(SHEETS_WEB_APP_URL, {
+        // text/plain evita preflight; CORS permite confirmar resposta do Apps Script
+        var response = await fetch(SHEETS_WEB_APP_URL, {
             method: 'POST',
-            mode: 'no-cors',
+            redirect: 'follow',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
         });
+
+        var resultText = await response.text();
+        var result = null;
+        try {
+            result = JSON.parse(resultText);
+        } catch (parseErr) {
+            result = null;
+        }
+
+        if (!response.ok || (result && result.ok === false)) {
+            throw new Error((result && result.error) || 'Falha ao registrar o lead na planilha.');
+        }
 
         showMessage(form, 'success', 'Recebemos seu contato! Em breve nossa equipe retornará.');
         form.reset();
