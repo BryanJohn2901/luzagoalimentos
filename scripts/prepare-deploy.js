@@ -11,6 +11,22 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 
+function loadDotEnv() {
+  const envPath = path.join(ROOT, '.env');
+  if (!fs.existsSync(envPath)) return;
+  fs.readFileSync(envPath, 'utf8').split('\n').forEach(function (line) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith('#')) return;
+    const eq = trimmed.indexOf('=');
+    if (eq === -1) return;
+    const key = trimmed.slice(0, eq).trim();
+    const val = trimmed.slice(eq + 1).trim();
+    if (!process.env[key]) process.env[key] = val;
+  });
+}
+
+loadDotEnv();
+
 const ROUTES = [
   '/',
   '/empresa/',
@@ -44,9 +60,13 @@ function resolveSiteUrl() {
 
 function writeRuntimeConfig() {
   const sheetsUrl = process.env.SHEETS_WEB_APP_URL || '';
+  const webhookSecret = process.env.SHEETS_WEBHOOK_SECRET || '';
   const content =
     'window.LUZAGO_RUNTIME = ' +
-    JSON.stringify({ sheetsWebAppUrl: sheetsUrl }, null, 2) +
+    JSON.stringify({
+      sheetsWebAppUrl: sheetsUrl,
+      sheetsWebhookSecret: webhookSecret,
+    }, null, 2) +
     ';\n';
 
   fs.writeFileSync(path.join(ROOT, 'js', 'runtime-config.js'), content, 'utf8');

@@ -1,18 +1,21 @@
 /**
- * Luzago Alimentos — captura de leads
+ * Luzago Alimentos — captura de leads → Google Sheets (via Apps Script)
  *
- * Configure SHEETS_WEB_APP_URL após publicar o Google Apps Script
- * (arquivo google-apps-script.gs na raiz do projeto).
+ * Configure SHEETS_WEB_APP_URL na Vercel (ou .env + npm run build).
+ * O script do Google está em google-apps-script.gs na raiz do projeto.
  *
- * Tipos de formulário (data-lead-form):
- *   comercial  → leads comerciais (não contabilizar como fornecedor/currículo)
- *   curriculo  → envio de currículo
- *   fornecedor → cadastro de fornecedor
+ * Tipos (data-lead-form):
+ *   comercial  → Leads Comerciais
+ *   curriculo  → Curriculos (+ arquivo no Drive)
+ *   fornecedor → Fornecedores
  */
 (function () {
     'use strict';
 
-    var SHEETS_WEB_APP_URL = (window.LUZAGO_RUNTIME && window.LUZAGO_RUNTIME.sheetsWebAppUrl) || '';
+    var RUNTIME = window.LUZAGO_RUNTIME || {};
+    var SHEETS_WEB_APP_URL = RUNTIME.sheetsWebAppUrl || '';
+    var WEBHOOK_SECRET = RUNTIME.sheetsWebhookSecret || '';
+    var MAX_FILE_BYTES = 5 * 1024 * 1024;
 
     function captureLeadSource() {
         var params = new URLSearchParams(window.location.search);
@@ -44,6 +47,7 @@
         var data = {};
         var formData = new FormData(form);
         formData.forEach(function (value, key) {
+            if (value instanceof File) return;
             if (data[key]) {
                 if (!Array.isArray(data[key])) data[key] = [data[key]];
                 data[key].push(value);
@@ -52,6 +56,32 @@
             }
         });
         return data;
+    }
+
+    function readFileField(form) {
+        var input = form.querySelector('input[type="file"]');
+        if (!input || !input.files || !input.files[0]) {
+            return Promise.resolve(null);
+        }
+
+        var file = input.files[0];
+        if (file.size > MAX_FILE_BYTES) {
+            return Promise.reject(new Error('Arquivo muito grande. Máximo 5 MB.'));
+        }
+
+        return new Promise(function (resolve, reject) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var parts = String(reader.result).split(',');
+                resolve({
+                    name: file.name,
+                    mimeType: file.type || 'application/octet-stream',
+                    base64: parts[1] || ''
+                });
+            };
+            reader.onerror = function () { reject(new Error('Não foi possível ler o arquivo.')); };
+            reader.readAsDataURL(file);
+        });
     }
 
     function showMessage(form, type, text) {
@@ -84,29 +114,49 @@
     async function submitLead(form) {
         var leadType = form.getAttribute('data-lead-form');
         var source = captureLeadSource();
+        var fields = formToObject(form);
+        var arquivo = await readFileField(form);
+
+        if (arquivo) {
+            fields._arquivo = arquivo;
+        }
+
         var payload = {
             lead_type: leadType,
             source: source,
-            fields: formToObject(form),
+            fields: fields,
             submitted_at: new Date().toISOString()
         };
 
+        if (WEBHOOK_SECRET) {
+            payload.secret = WEBHOOK_SECRET;
+        }
+
         if (!SHEETS_WEB_APP_URL) {
-            console.info('[Luzago Leads] Payload pronto para envio:', payload);
+            console.info('[Luzago Leads] SHEETS_WEB_APP_URL não configurada. Payload:', payload);
             showMessage(form, 'success', 'Recebemos seu contato! Em breve nossa equipe retornará.');
             form.reset();
             return;
         }
 
-        var response = await fetch(SHEETS_WEB_APP_URL, {
+        // text/plain evita preflight CORS — padrão recomendado para Web App do Apps Script
+        await fetch(SHEETS_WEB_APP_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify(payload)
         });
 
         showMessage(form, 'success', 'Recebemos seu contato! Em breve nossa equipe retornará.');
         form.reset();
+
+        var fileLabel = form.querySelector('[data-file-label]');
+        if (fileLabel) {
+            var labelEl = document.getElementById(fileLabel.getAttribute('data-file-label'));
+            if (labelEl) {
+                labelEl.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i><span>Clique para enviar seu currículo</span>';
+            }
+        }
     }
 
     function initFileLabels() {
@@ -130,8 +180,9 @@
                 e.preventDefault();
                 setLoading(form, true);
                 submitLead(form)
-                    .catch(function () {
-                        showMessage(form, 'error', 'Não foi possível enviar agora. Tente novamente ou ligue (41) 3668-7866.');
+                    .catch(function (err) {
+                        var msg = (err && err.message) ? err.message : 'Não foi possível enviar agora. Tente novamente ou ligue (41) 3668-7866.';
+                        showMessage(form, 'error', msg);
                     })
                     .finally(function () {
                         setLoading(form, false);
